@@ -55,13 +55,9 @@ fn main() {
         b: u32,
     };
     let s: u32 = (0..=n)
-        .filter_map(|c| {
+        .filter(|&c| {
             let s = sum_digit(c);
-            if s >= a && s <= b {
-                Some(c)
-            } else {
-                None
-            }
+            s >= a && s <= b
         })
         .sum();
     println!("{}", s);
