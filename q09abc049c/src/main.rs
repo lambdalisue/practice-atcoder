@@ -52,28 +52,20 @@ fn main() {
     input! {
         value: String,
     };
-    let mut value = value;
-    loop {
-        let previous = value.clone();
-        value = remove_suffix(&value, "dreamer").to_string();
-        value = remove_suffix(&value, "dream").to_string();
-        value = remove_suffix(&value, "eraser").to_string();
-        value = remove_suffix(&value, "erase").to_string();
-        if value == "" {
-            println!("YES");
-            return;
-        }
-        if value == previous {
-            println!("NO");
-            return;
+    let patterns: Vec<Vec<char>> = ["dream", "dreamer", "erase", "eraser"]
+        .iter()
+        .map(|s| s.chars().rev().collect())
+        .collect();
+    let value: Vec<char> = value.chars().rev().collect();
+    let mut value = &value[..];
+    while value.len() > 0 {
+        match patterns.iter().find(|&p| value.starts_with(p)) {
+            Some(p) => value = &value[p.len()..],
+            None => {
+                println!("NO");
+                return;
+            }
         }
     }
-}
-
-fn remove_suffix<'a>(s: &'a str, p: &str) -> &'a str {
-    if s.ends_with(p) {
-        &s[..s.len() - p.len()]
-    } else {
-        s
-    }
+    println!("YES");
 }
